@@ -18,7 +18,7 @@
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://github.com/LukaSpoljar/Mirror",
+  "homepage": "https://lukaspoljar.github.io/Mirror",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
