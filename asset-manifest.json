@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/LukaSpoljar/Mirror/static/css/main.d1877fab.css",
-    "main.js": "/LukaSpoljar/Mirror/static/js/main.5dbca12b.js",
-    "index.html": "/LukaSpoljar/Mirror/index.html",
-    "main.d1877fab.css.map": "/LukaSpoljar/Mirror/static/css/main.d1877fab.css.map",
-    "main.5dbca12b.js.map": "/LukaSpoljar/Mirror/static/js/main.5dbca12b.js.map"
+    "main.css": "/Mirror/static/css/main.d1877fab.css",
+    "main.js": "/Mirror/static/js/main.5dbca12b.js",
+    "index.html": "/Mirror/index.html",
+    "main.d1877fab.css.map": "/Mirror/static/css/main.d1877fab.css.map",
+    "main.5dbca12b.js.map": "/Mirror/static/js/main.5dbca12b.js.map"
   },
   "entrypoints": [
     "static/css/main.d1877fab.css",
