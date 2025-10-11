@@ -39,7 +39,7 @@ function App() {
     const bodyElement = document.getElementsByTagName('body')[0];
 
     videoRef.current?.addEventListener('click', (event: Event) => {
-      document.fullscreenElement == bodyElement ? closeFullscreen(bodyElement) : openFullscreen(bodyElement)
+      document.fullscreenElement === bodyElement ? closeFullscreen(bodyElement) : openFullscreen(bodyElement)
     });
 
     navigator.permissions.query(({ name: "camera" } as any)).then(result => {
