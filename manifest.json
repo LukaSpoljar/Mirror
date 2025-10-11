@@ -1,9 +1,7 @@
 {
-  "lang": "en",
   "short_name": "",
   "name": "Mirror",
   "author": "Ivan Luka Špoljar",
-  "description": "Nosce te ipsum.",
   "icons": [
     {
       "src": "favicon.ico",
