@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/LukaSpoljar/Mirror.git/static/css/main.d1877fab.css",
-    "main.js": "/LukaSpoljar/Mirror.git/static/js/main.6b72ec68.js",
-    "index.html": "/LukaSpoljar/Mirror.git/index.html",
-    "main.d1877fab.css.map": "/LukaSpoljar/Mirror.git/static/css/main.d1877fab.css.map",
-    "main.6b72ec68.js.map": "/LukaSpoljar/Mirror.git/static/js/main.6b72ec68.js.map"
+    "main.css": "/LukaSpoljar/Mirror/static/css/main.d1877fab.css",
+    "main.js": "/LukaSpoljar/Mirror/static/js/main.5dbca12b.js",
+    "index.html": "/LukaSpoljar/Mirror/index.html",
+    "main.d1877fab.css.map": "/LukaSpoljar/Mirror/static/css/main.d1877fab.css.map",
+    "main.5dbca12b.js.map": "/LukaSpoljar/Mirror/static/js/main.5dbca12b.js.map"
   },
   "entrypoints": [
     "static/css/main.d1877fab.css",
-    "static/js/main.6b72ec68.js"
+    "static/js/main.5dbca12b.js"
   ]
 }
