@@ -64,7 +64,7 @@ function App() {
       }
     }
   }
-  const getZoomObject = (): any => {
+  const getZoomLevel = (): any => {
     if (videoRef.current?.srcObject) {
       const track = (videoRef.current.srcObject as MediaStream).getVideoTracks()[0];
       const capabilities: any = track.getCapabilities();
@@ -115,25 +115,28 @@ function App() {
           return distanceA > distanceB ? 0 : 1;
         }
         const isZooming = (distance: number = 0, newDirection: number = 1) => {
-          const step = cameraSettings?.step ? cameraSettings.step : 0.01;
-          let zoomLevel: any = null;
 
-          if (initialDirection === newDirection) {
-            if (distance < previousDistance) {
-              //console.log("SMANJUJE SE");
-              zoomLevel = getZoomObject()?.currentLevel - step;
+          let zoomLevel: number = getZoomLevel();
+
+          if (Number(zoomLevel)) {
+            const step = cameraSettings?.step ? cameraSettings.step : 0.01;
+            if (initialDirection === newDirection) {
+              if (distance < previousDistance) {
+                //console.log("Decreasing");
+                zoomLevel = zoomLevel - step;
+              } else {
+                //console.log('Increasing');
+                zoomLevel = zoomLevel + step;
+              }
+              previousDistance = distance;
+              if (Number(zoomLevel)) {
+                setZoomLevel(zoomLevel)
+              }
             } else {
-              //console.log('POVEĆAVA SE');
-              zoomLevel = getZoomObject()?.currentLevel + step;
+              initialDirection = newDirection;
+              startPoint = endPoint;
+              previousDistance = 0;
             }
-            previousDistance = distance;
-            if (Number(zoomLevel)) {
-              setZoomLevel(zoomLevel)
-            }
-          } else {
-            initialDirection = newDirection;
-            startPoint = endPoint;
-            previousDistance = 0;
           }
         }
 
