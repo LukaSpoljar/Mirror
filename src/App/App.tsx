@@ -57,7 +57,7 @@ function App() {
 
         // Set zoom level (within supported range)
         await track.applyConstraints({
-          advanced: [{ zoom: Math.min(zoomLevel, cameraSettings.max) }] as any // Example: zoom to 2x
+          advanced: [{ zoom: zoomLevel }] as any // Example: zoom to 2x
         });
       } else {
         console.warn('Zoom not supported on this device');
