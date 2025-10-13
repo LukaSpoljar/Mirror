@@ -39,6 +39,9 @@ function App() {
               max: capabilities.zoom.max,
               step: capabilities.zoom.step
             }
+            await track.applyConstraints({
+              advanced: [{ zoom: 2 }] as any // Example: zoom to 2x
+            });
           } else { console.warn('Zoom not supported on this device'); }
         }
       }
@@ -55,9 +58,8 @@ function App() {
         console.log('Current zoom:', settings.zoom);
         console.log('Zoom range:', capabilities.zoom);
 
-        // Set zoom level (within supported range)
         await track.applyConstraints({
-          advanced: [{ zoom: 2 }] as any // Example: zoom to 2x
+          advanced: [{ zoom: zoomLevel }] as any // Example: zoom to 2x
         });
       } else {
         console.warn('Zoom not supported on this device');
@@ -116,7 +118,7 @@ function App() {
         }
         const isZooming = (distance: number = 0, newDirection: number = 1) => {
 
-          let zoomLevel: number = getZoomLevel();
+          let zoomLevel: number = getZoomLevel() ? getZoomLevel() : 1;
 
           if (Number(zoomLevel)) {
             const step = cameraSettings?.step ? cameraSettings.step : 0.01;
@@ -130,7 +132,7 @@ function App() {
               }
               previousDistance = distance;
               if (Number(zoomLevel)) {
-                setZoomLevel(zoomLevel)
+                setZoomLevel(zoomLevel);
               }
             } else {
               initialDirection = newDirection;
