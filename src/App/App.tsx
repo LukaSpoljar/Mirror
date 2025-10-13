@@ -93,7 +93,8 @@ function App() {
       // document.fullscreenElement === bodyElement ? closeFullscreen(bodyElement) : openFullscreen(bodyElement)
     }*/
 
-    let onylOnce = true;
+    /*
+      let onylOnce = true;
     let startPoint: any = null;
 
     // Horizontal -> 0; Vertical -> 1;
@@ -169,6 +170,7 @@ function App() {
       }
     }
 
+    */
     navigator.permissions.query(({ name: "camera" } as any)).then(result => {
       console.log("Camera permission state:", result.state);
       if (result.state === "granted" || "prompt") {
