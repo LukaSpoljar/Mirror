@@ -4,6 +4,7 @@ function App() {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   let cameraSettings: any = null;
+  let stream: any = null;
 
   const openFullscreen = (htmlElement: any) => {
     if (htmlElement.requestFullscreen) htmlElement.requestFullscreen();
@@ -18,7 +19,8 @@ function App() {
   const startSelfieCamera = async () => {
     try {
       if (videoRef.current) {
-        videoRef.current.srcObject = await navigator.mediaDevices.getUserMedia({
+
+        stream =   await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: 'user', //"user" = front camera, "environment" = rear camera
             width: { ideal: 8000 },
@@ -27,6 +29,7 @@ function App() {
           },
           audio: false
         });
+        videoRef.current.srcObject = stream;
 
         if (videoRef.current?.srcObject) {
           const track = (videoRef.current.srcObject as MediaStream).getVideoTracks()[0];
@@ -40,7 +43,7 @@ function App() {
               step: capabilities.zoom.step
             }
             await track.applyConstraints({
-              advanced: [{ zoom: 2 }] as any // Example: zoom to 2x
+              advanced: [{ zoom: 1 }] as any // Example: zoom to 2x
             });
           } else { console.warn('Zoom not supported on this device'); }
         }
@@ -48,9 +51,8 @@ function App() {
     } catch (error) { console.error("Error accessing selfie camera:", error); }
   }
   const setZoomLevel = async (zoomLevel: number = 1) => {
-    if (videoRef.current?.srcObject) {
-
-      const track = (videoRef.current.srcObject as MediaStream).getVideoTracks()[0];
+    if (stream) {
+      const track = stream.getVideoTracks()[0];
       const capabilities: any = track.getCapabilities();
 
       if (track && capabilities && 'zoom' in capabilities) {
@@ -93,7 +95,7 @@ function App() {
       // document.fullscreenElement === bodyElement ? closeFullscreen(bodyElement) : openFullscreen(bodyElement)
     }*/
 
-    /*
+  
       let onylOnce = true;
     let startPoint: any = null;
 
@@ -170,7 +172,7 @@ function App() {
       }
     }
 
-    */
+    
     navigator.permissions.query(({ name: "camera" } as any)).then(result => {
       console.log("Camera permission state:", result.state);
       if (result.state === "granted" || "prompt") {
