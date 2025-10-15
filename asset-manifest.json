@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/Mirror/static/css/main.93671886.css",
-    "main.js": "/Mirror/static/js/main.4f7d3361.js",
+    "main.js": "/Mirror/static/js/main.129064b5.js",
     "index.html": "/Mirror/index.html",
     "main.93671886.css.map": "/Mirror/static/css/main.93671886.css.map",
-    "main.4f7d3361.js.map": "/Mirror/static/js/main.4f7d3361.js.map"
+    "main.129064b5.js.map": "/Mirror/static/js/main.129064b5.js.map"
   },
   "entrypoints": [
     "static/css/main.93671886.css",
-    "static/js/main.4f7d3361.js"
+    "static/js/main.129064b5.js"
   ]
 }
