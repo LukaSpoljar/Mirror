@@ -3,7 +3,7 @@ import './App.scss';
 function App() {
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  //let cameraSettings: any = null;
+  let zoomLevel: number = 0;
 
   const openFullscreen = (htmlElement: any) => {
     if (htmlElement.requestFullscreen) htmlElement.requestFullscreen();
@@ -16,6 +16,7 @@ function App() {
     else if (htmlElement.msExitFullscreen) htmlElement.msExitFullscreen();
   }
   const startSelfieCamera = async () => {
+    zoomLevel = 1;
     try {
       if (videoRef.current) {
 
@@ -43,7 +44,7 @@ function App() {
               }
             */
             await track.applyConstraints({
-              advanced: [{ zoom: 1 }] as any // Example: zoom to 2x
+              advanced: [{ zoom: zoomLevel }] as any // Example: zoom to 2x
             });
           } else { console.warn('Zoom not supported on this device'); }
         }
@@ -69,7 +70,6 @@ function App() {
     }
   }
 
-
   useEffect(() => {
 
     window.onresize = () => { /* console.log("RESIZING IS HAPPENING"); */ }
@@ -80,84 +80,9 @@ function App() {
       // document.fullscreenElement === bodyElement ? closeFullscreen(bodyElement) : openFullscreen(bodyElement)
     }*/
 
-    let onylOnce = true;
-    let startPoint: any = null;
-    let increasingStep: number = 0;
-    let decreasingStep: number = 0;
-
-    // Horizontal -> 0; Vertical -> 1;
-    let initialDirection: number = 1;
-    let diagonalDistance: number = 0;
-
-    let previousEndPoint: any = null;
-    let directionChangePoint: any = null;
-
-    if (window.PointerEvent && ('ontouchstart' in window || navigator.maxTouchPoints > 0 || window.matchMedia('(pointer: coarse)').matches)) {
-
-      (videoRef.current as HTMLElement).onpointerdown = (event: PointerEvent) => {
-        onylOnce = true;
-        initialDirection = 1;
-        diagonalDistance = increasingStep = decreasingStep = 0;
-        previousEndPoint = directionChangePoint = null;
-        startPoint = { x: event.clientX, y: event.clientY, time: Date.now() };
-      }
-
-      (videoRef.current as HTMLElement).onpointermove = (event: PointerEvent) => {
-
-        let endPoint = { x: event.clientX, y: event.clientY, time: Date.now() };
-
-        const isZooming = (distance: number = 0, increaseOrDecrease: 'INCREASE' | 'DECREASE' = 'INCREASE') => {
-          distance = Math.trunc(distance);
-
-          if (decreasingStep >= 0 && increasingStep >= 0 && distance > 0 && increasingStep <= 2) {
-            if (increaseOrDecrease === 'INCREASE') {
-              directionChangePoint = (initialDirection ? endPoint.y : endPoint.x);
-              decreasingStep = 0;
-              if ((Math.abs(distance) / (initialDirection ? window.innerHeight : window.innerWidth)) > (increasingStep) * 0.1) {
-                increasingStep += 0.01;
-                //setZoomLevel(Number(increasingStep.toFixed(1)));
-              }
-            } else if (increaseOrDecrease === 'DECREASE') {
-              increasingStep = 0;
-              if (Number(directionChangePoint) && (Math.abs(directionChangePoint - (initialDirection ? endPoint.y : endPoint.x)) / (initialDirection ? window.innerHeight : window.innerWidth)) > decreasingStep * 0.1) {
-                decreasingStep += 1;
-                //setZoomLevel(decreasingStep);
-              }
-            }
-          }
-        }
-
-        let chatetusHorizontal = Math.abs(endPoint?.x - startPoint?.x);
-        let chatetusVertical = Math.abs(endPoint?.y - startPoint?.y);
-        diagonalDistance = Math.pow(Math.pow(chatetusHorizontal, 2) + Math.pow(chatetusVertical, 2), 0.5);
-
-        /*
-          //Calculating angle
-          let angle_in_degrees = Math.atan2((endPoint.y - startPoint.y), (endPoint.x - startPoint.x)) * (180 / Math.PI);
-          if (angle_in_degrees < 0) {
-            angle_in_degrees = 360 + angle_in_degrees;
-          }
-        */
-
-        if (onylOnce && diagonalDistance > 10 * Math.trunc(window.devicePixelRatio)) {
-          initialDirection = chatetusHorizontal > chatetusVertical ? 0 : 1;
-          onylOnce = false;
-        }
-        if (onylOnce === false) {
-          initialDirection ? isZooming(startPoint.y - endPoint.y, (Number(previousEndPoint) > endPoint.y) ? 'INCREASE' : 'DECREASE') : isZooming(endPoint.x - startPoint.x, (endPoint.x > Number(previousEndPoint)) ? 'INCREASE' : 'DECREASE');
-          initialDirection ? previousEndPoint = endPoint.y : previousEndPoint = endPoint.x;
-        }
-      }
-      (videoRef.current as HTMLElement).onpointerup = (event: PointerEvent) => {
-        //console.log("Razlika je: " + diagonalDistance);
-      }
-      (videoRef.current as HTMLElement).onpointercancel = (event: PointerEvent) => {
-        //console.log("Razlika je: " + diagonalDistance);
-      }
-    }
-
     (videoRef.current as HTMLElement).onclick = (event: Event) => {
-      setZoomLevel(1);
+      zoomLevel = zoomLevel == 1 ? 2 : 1;
+      setZoomLevel(zoomLevel);
     }
 
     navigator.permissions.query(({ name: "camera" } as any)).then(result => {
