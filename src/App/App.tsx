@@ -115,7 +115,7 @@ function App() {
               decreasingStep = 0;
               if ((Math.abs(distance) / (initialDirection ? window.innerHeight : window.innerWidth)) > (increasingStep) * 0.1) {
                 increasingStep += 0.01;
-                setZoomLevel(Number(increasingStep.toFixed(1)));
+                //setZoomLevel(Number(increasingStep.toFixed(1)));
               }
             } else if (increaseOrDecrease === 'DECREASE') {
               increasingStep = 0;
