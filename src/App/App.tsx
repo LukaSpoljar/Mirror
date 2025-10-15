@@ -109,19 +109,19 @@ function App() {
         const isZooming = (distance: number = 0, increaseOrDecrease: 'INCREASE' | 'DECREASE' = 'INCREASE') => {
           distance = Math.trunc(distance);
 
-          if (decreasingStep >= 0 && increasingStep >= 0 && distance > 0) {
+          if (decreasingStep >= 0 && increasingStep >= 0 && distance > 0 && increasingStep <= 2) {
             if (increaseOrDecrease === 'INCREASE') {
               directionChangePoint = (initialDirection ? endPoint.y : endPoint.x);
               decreasingStep = 0;
               if ((Math.abs(distance) / (initialDirection ? window.innerHeight : window.innerWidth)) > (increasingStep) * 0.1) {
-                increasingStep += 1;
-                setZoomLevel(increasingStep);
+                increasingStep += 0.01;
+                setZoomLevel(Number(increasingStep.toFixed(1)));
               }
             } else if (increaseOrDecrease === 'DECREASE') {
               increasingStep = 0;
               if (Number(directionChangePoint) && (Math.abs(directionChangePoint - (initialDirection ? endPoint.y : endPoint.x)) / (initialDirection ? window.innerHeight : window.innerWidth)) > decreasingStep * 0.1) {
                 decreasingStep += 1;
-                setZoomLevel(decreasingStep);
+                //setZoomLevel(decreasingStep);
               }
             }
           }
@@ -154,6 +154,10 @@ function App() {
       (videoRef.current as HTMLElement).onpointercancel = (event: PointerEvent) => {
         //console.log("Razlika je: " + diagonalDistance);
       }
+    }
+
+    (videoRef.current as HTMLElement).onclick = (event: Event) => {
+      setZoomLevel(1);
     }
 
     navigator.permissions.query(({ name: "camera" } as any)).then(result => {
