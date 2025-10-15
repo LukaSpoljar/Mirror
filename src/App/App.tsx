@@ -83,18 +83,22 @@ function App() {
     let onylOnce = true;
     let startPoint: any = null;
     let increasingStep: number = 0;
+    let decreasingStep: number = 0;
 
     // Horizontal -> 0; Vertical -> 1;
     let initialDirection: number = 1;
-    let previousDistance: number = 0;
     let diagonalDistance: number = 0;
+
+    let previousEndPoint: any = null;
+    let directionChangePoint: any = null;
 
     if (window.PointerEvent && ('ontouchstart' in window || navigator.maxTouchPoints > 0 || window.matchMedia('(pointer: coarse)').matches)) {
 
       (videoRef.current as HTMLElement).onpointerdown = (event: PointerEvent) => {
         onylOnce = true;
-        initialDirection = increasingStep = 1;
-        diagonalDistance = previousDistance = 0;
+        initialDirection = 1;
+        diagonalDistance = increasingStep = decreasingStep = 0;
+        previousEndPoint = directionChangePoint = null;
         startPoint = { x: event.clientX, y: event.clientY, time: Date.now() };
       }
 
@@ -102,16 +106,23 @@ function App() {
 
         let endPoint = { x: event.clientX, y: event.clientY, time: Date.now() };
 
-        const isZooming = (distance: number = 0) => {
+        const isZooming = (distance: number = 0, increaseOrDecrease: 'INCREASE' | 'DECREASE' = 'INCREASE') => {
           distance = Math.trunc(distance);
-          if (increasingStep > 0) {
-            if (distance >= 0 && (Math.abs(distance) / (initialDirection ? window.innerHeight : window.innerWidth)) < increasingStep * 0.1 && distance < previousDistance) {
-              increasingStep -= 1;
-            }
-            else if (distance >= 0 && (Math.abs(distance) / (initialDirection ? window.innerHeight : window.innerWidth)) > increasingStep * 0.1) {
-              setZoomLevel(increasingStep);
-              increasingStep = distance < Math.trunc(previousDistance) ? increasingStep - 1 : increasingStep + 1;
-              previousDistance = distance;
+
+          if (decreasingStep >= 0 && increasingStep >= 0 && distance > 0) {
+            if (increaseOrDecrease === 'INCREASE') {
+              directionChangePoint = (initialDirection ? endPoint.y : endPoint.x);
+              decreasingStep = 0;
+              if ((Math.abs(distance) / (initialDirection ? window.innerHeight : window.innerWidth)) > (increasingStep) * 0.1) {
+                increasingStep += 1;
+                setZoomLevel(increasingStep);
+              }
+            } else if (increaseOrDecrease === 'DECREASE') {
+              increasingStep = 0;
+              if (Number(directionChangePoint) && (Math.abs(directionChangePoint - (initialDirection ? endPoint.y : endPoint.x)) / (initialDirection ? window.innerHeight : window.innerWidth)) > decreasingStep * 0.1) {
+                decreasingStep += 1;
+                setZoomLevel(decreasingStep);
+              }
             }
           }
         }
@@ -133,7 +144,8 @@ function App() {
           onylOnce = false;
         }
         if (onylOnce === false) {
-          initialDirection ? isZooming(startPoint.y - endPoint.y) : isZooming(endPoint.x - startPoint.x);
+          initialDirection ? isZooming(startPoint.y - endPoint.y, (Number(previousEndPoint) > endPoint.y) ? 'INCREASE' : 'DECREASE') : isZooming(endPoint.x - startPoint.x, (endPoint.x > Number(previousEndPoint)) ? 'INCREASE' : 'DECREASE');
+          initialDirection ? previousEndPoint = endPoint.y : previousEndPoint = endPoint.x;
         }
       }
       (videoRef.current as HTMLElement).onpointerup = (event: PointerEvent) => {
